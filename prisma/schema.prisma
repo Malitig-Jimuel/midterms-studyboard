@@ -1,0 +1,44 @@
+// This is your Prisma schema file.
+// Learn more about it here: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  name      String
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+
+  // A user can own many groups.
+  groups Group[]
+}
+
+model Group {
+  id          String   @id @default(cuid())
+  name        String
+  subject     String
+  memberCount Int      @default(1)
+  tasks       Task[]
+  createdAt   DateTime @default(now())
+
+  // Every group must have an owner. This is the field our
+  // authorization checks compare against a logged-in user's id.
+  ownerId String
+  owner   User   @relation(fields: [ownerId], references: [id])
+}
+
+model Task {
+  id      String  @id @default(cuid())
+  title   String
+  done    Boolean @default(false)
+  group   Group   @relation(fields: [groupId], references: [id], onDelete: Cascade)
+  groupId String
+}

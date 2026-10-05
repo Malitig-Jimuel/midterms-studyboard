@@ -1,0 +1,126 @@
+{
+  "info": {
+    "name": "StudyBoard API — Activity 3",
+    "description": "CRUD endpoints for groups and tasks. Import into Postman or Bruno and run against http://localhost:3000.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "http://localhost:3000" },
+    { "key": "groupId", "value": "1" },
+    { "key": "taskId", "value": "t1" }
+  ],
+  "item": [
+    {
+      "name": "Groups",
+      "item": [
+        {
+          "name": "List all groups",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/groups"
+          }
+        },
+        {
+          "name": "Create a group",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/groups",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Organic Chemistry Study Pod\",\n  \"subject\": \"Chemistry\",\n  \"memberCount\": 4\n}"
+            }
+          }
+        },
+        {
+          "name": "Get one group",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/groups/{{groupId}}"
+          }
+        },
+        {
+          "name": "Update a group (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/groups/{{groupId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"memberCount\": 6\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete a group",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/groups/{{groupId}}"
+          }
+        },
+        {
+          "name": "Get a group that doesn't exist (expect 404)",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/groups/999"
+          }
+        }
+      ]
+    },
+    {
+      "name": "Tasks",
+      "item": [
+        {
+          "name": "List tasks for a group",
+          "request": {
+            "method": "GET",
+            "url": "{{baseUrl}}/api/groups/{{groupId}}/tasks"
+          }
+        },
+        {
+          "name": "Create a task",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/groups/{{groupId}}/tasks",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"title\": \"Draft study guide outline\"\n}"
+            }
+          }
+        },
+        {
+          "name": "Toggle a task done (PATCH)",
+          "request": {
+            "method": "PATCH",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/groups/{{groupId}}/tasks/{{taskId}}",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"done\": true\n}"
+            }
+          }
+        },
+        {
+          "name": "Delete a task",
+          "request": {
+            "method": "DELETE",
+            "url": "{{baseUrl}}/api/groups/{{groupId}}/tasks/{{taskId}}"
+          }
+        },
+        {
+          "name": "Create a task with missing title (expect 400)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "url": "{{baseUrl}}/api/groups/{{groupId}}/tasks",
+            "body": {
+              "mode": "raw",
+              "raw": "{}"
+            }
+          }
+        }
+      ]
+    }
+  ]
+}
