@@ -1,52 +1,43 @@
 "use client";
 
-import { Task } from "@/lib/data";
-import { useRouter } from "next/navigation";
 import { useState } from "react";
-
-// "use client" is required because this component owns interactive state
-// (useState) and responds to a click event. Note: since there's no backend
-// yet, toggling here only affects this component's local state and will
-// reset on page refresh — real persistence arrives in Week 5 (database)
-// and Week 4 (API routes).
+import { useRouter } from "next/navigation";
+import { Task } from "@/lib/data";
 
 export default function TaskItem({
   task,
-  isOwner,
   groupId,
+  isOwner,
 }: {
   task: Task;
-  isOwner: boolean;
   groupId: string;
+  isOwner: boolean;
 }) {
   const router = useRouter();
   const [done, setDone] = useState(task.done);
-  const [error, setError] = useState<string | null>(null);
   const [isDeleting, setIsDeleting] = useState(false);
+  const [error, setError] = useState("");
 
   async function handleToggle() {
     if (!isOwner) return;
 
-    const previousValue = done;
-    const newValue = !done;
+    const previous = done;
+    const next = !done;
 
-    setDone(newValue);
-    setError(null);
+    setDone(next);
+    setError("");
 
-    try {
-      const res = await fetch(`/api/groups/${groupId}/tasks/${task.id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ done: newValue }),
-      });
+    const res = await fetch(`/api/groups/${groupId}/tasks/${task.id}`, {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ done: next }),
+    });
 
-      if (!res.ok) {
-        setDone(previousValue);
-        setError("Couldn't update task.");
-      }
-    } catch {
-      setDone(previousValue);
-      setError("Couldn't update task.");
+    if (!res.ok) {
+      setDone(previous);
+      const isJson = res.headers.get("content-type")?.includes("application/json");
+      const data = isJson ? await res.json() : null;
+      setError(data?.error ?? `Failed to update task (status ${res.status}).`);
     }
   }
 
@@ -54,48 +45,47 @@ export default function TaskItem({
     if (!isOwner) return;
 
     setIsDeleting(true);
-    setError(null);
+    setError("");
 
-    try {
-      const res = await fetch(`/api/groups/${groupId}/tasks/${task.id}`, {
-        method: "DELETE",
-      });
+    const res = await fetch(`/api/groups/${groupId}/tasks/${task.id}`, {
+      method: "DELETE",
+    });
 
-      if (!res.ok) {
-        setIsDeleting(false);
-        setError("Couldn't delete task.");
-        return;
-      }
-
-      router.refresh();
-    } catch {
+    if (!res.ok) {
+      const isJson = res.headers.get("content-type")?.includes("application/json");
+      const data = isJson ? await res.json() : null;
+      setError(data?.error ?? `Failed to delete task (status ${res.status}).`);
       setIsDeleting(false);
-      setError("Couldn't delete task.");
+      return;
     }
+
+    router.refresh();
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-md border px-3 py-2 text-pink-700 hover:bg-pink-100">
-      <input
-        type="checkbox"
-        checked={done}
-        disabled={!isOwner}
-        onChange={handleToggle}
-        className="h-4 w-4 disabled:cursor-not-allowed disabled:opacity-50"
-      />
-      <span className={done ? "line-through text-purple-400" : ""}>
-        {task.title}
-      </span>
-      {isOwner && (
-        <button
-          onClick={handleDelete}
-          disabled={isDeleting}
-          className="ml-auto text-xs text-red-600 hover:underline disabled:cursor-not-allowed disabled:opacity-50"
-        >
-          {isDeleting ? "Deleting…" : "Delete"}
-        </button>
-      )}
-      {error && <span className="text-xs text-red-600">{error}</span>}
+    <li className="rounded-md border px-3 py-2">
+      <div className="flex items-center gap-3">
+        <input
+          type="checkbox"
+          checked={done}
+          onChange={handleToggle}
+          disabled={!isOwner || isDeleting}
+          className="h-4 w-4 disabled:opacity-50"
+        />
+        <span className={`flex-1 ${done ? "line-through text-gray-400" : ""}`}>
+          {task.title}
+        </span>
+        {isOwner && (
+          <button
+            onClick={handleDelete}
+            disabled={isDeleting}
+            className="text-sm text-red-600 hover:underline disabled:opacity-50"
+          >
+            {isDeleting ? "Deleting..." : "Delete"}
+          </button>
+        )}
+      </div>
+      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
     </li>
   );
 }
