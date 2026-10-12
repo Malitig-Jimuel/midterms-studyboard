@@ -41,7 +41,7 @@ export async function GET(request: Request) {
         const books = await searchBooks(parsed.data.q);
         return NextResponse.json(books);
     } catch (error) {
-        if axios.isAxiosError(error) {
+        if (axios.isAxiosError(error)) {
             console.error("Open Library API error:", error.message);
             return NextResponse.json(
                 { error: "Book search is temporarily unavailable. Please try again later." },
