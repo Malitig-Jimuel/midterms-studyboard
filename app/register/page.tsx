@@ -60,9 +60,9 @@ export default function RegisterPage() {
 
   return (
     <main className="mx-auto max-w-md p-24">
-      <h1 className="text-2xl font-bold text-purple-950">Create an Account</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Create an Account</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 text-purple-900">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 text-slate-800">
         <div>
           <label htmlFor="name" className="block text-sm font-medium">
             Name
@@ -116,7 +116,7 @@ export default function RegisterPage() {
 
       <p className="mt-4 text-sm text-gray-600">
         Already have an account?{" "}
-        <Link href="/login" className="text-purple-600 hover:underline">
+        <Link href="/login" className="text-slate-700 hover:underline">
           Log in
         </Link>
       </p>

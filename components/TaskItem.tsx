@@ -63,7 +63,7 @@ export default function TaskItem({
   }
 
   return (
-    <li className="flex items-center gap-3 rounded-md border px-3 py-2 text-pink-700 hover:bg-pink-100">
+    <li className="flex items-center gap-3 rounded-md border px-3 py-2 text-slate-700 hover:bg-slate-100">
       <input
         type="checkbox"
         checked={done}
@@ -71,7 +71,7 @@ export default function TaskItem({
         onChange={handleToggle}
         className="h-4 w-4 disabled:cursor-not-allowed disabled:opacity-50"
       />
-      <span className={done ? "line-through text-pink-400" : ""}>
+      <span className={done ? "line-through text-slate-400" : ""}>
         {task.title}
       </span>
       {isOwner && (

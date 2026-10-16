@@ -29,8 +29,8 @@ export default async function GroupDetailPage({
     <div className="mx-auto max-w-4xl p-6">
       <div className="mb-6 flex items-center justify-between gap-4">
         <div>
-          <h1 className="text-2xl font-bold text-pink-800">{group.name}</h1>
-          <p className="text-sm text-pink-500">{group.subject}</p>
+          <h1 className="text-2xl font-bold text-slate-900">{group.name}</h1>
+          <p className="text-sm text-slate-500">{group.subject}</p>
         </div>
 
         {isOwner && (
@@ -48,7 +48,7 @@ export default async function GroupDetailPage({
           />
         ))}
         {group.tasks.length === 0 && (
-          <li className="text-sm text-pink-500">No tasks yet.</li>
+          <li className="text-sm text-slate-500">No tasks yet.</li>
         )}
       </ul>
 
@@ -58,8 +58,8 @@ export default async function GroupDetailPage({
         </div>
       )}
 
-      <h2 className="mt-8 text-lg font-semibold text-pink-800">Reference Books</h2>
-      <p className="mt-1 text-sm text-pink-500">
+      <h2 className="mt-8 text-lg font-semibold text-slate-900">Reference Books</h2>
+      <p className="mt-1 text-sm text-slate-500">
         Powered by the Open Library API - search for books related to{" "}
         {group.subject}.
       </p>

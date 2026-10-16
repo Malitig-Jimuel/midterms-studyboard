@@ -86,8 +86,8 @@ export default function AISubtaskGenerator({ groupId }: { groupId: string }) {
 
     return (
     <div className="rounded-md border border-dashed p-4">
-      <p className="text-sm font-medium text-pink-700">✨ AI Task Breakdown</p>
-      <p className="mt-1 text-xs text-pink-500">
+      <p className="text-sm font-medium text-slate-700">✨ AI Task Breakdown</p>
+      <p className="mt-1 text-xs text-slate-500">
         Describe a broad task, and get suggested subtasks to add.
       </p>
 
@@ -103,7 +103,7 @@ export default function AISubtaskGenerator({ groupId }: { groupId: string }) {
         <button
           type="submit"
           disabled={isGenerating}
-          className="whitespace-nowrap rounded-md bg-pink-600 px-4 py-2 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
+          className="whitespace-nowrap rounded-md bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
         >
           {isGenerating ? "Thinking..." : "Suggest Subtasks"}
         </button>
@@ -113,7 +113,7 @@ export default function AISubtaskGenerator({ groupId }: { groupId: string }) {
 
       {suggestions.length > 0 && (
         <div className="mt-3">
-          <ul className="flex flex-col gap-1 text-pink-600">
+          <ul className="flex flex-col gap-1 text-slate-600">
             {suggestions.map((subtask) => (
               <li key={subtask} className="flex items-center gap-2 text-sm">
                 <input
@@ -129,7 +129,7 @@ export default function AISubtaskGenerator({ groupId }: { groupId: string }) {
           <button
             onClick={handleAddSelected}
             disabled={isAdding || checked.size === 0}
-            className="mt-3 rounded-md bg-pink-600 px-4 py-2 text-sm font-medium text-white hover:bg-pink-700 disabled:opacity-50"
+            className="mt-3 rounded-md bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
           >
             {isAdding ? "Adding..." : `Add Selected (${checked.size})`}
           </button>
