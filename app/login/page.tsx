@@ -47,9 +47,9 @@ export default function LoginPage() {
 
   return (
     <main className="mx-auto max-w-sm p-24">
-      <h1 className="text-2xl font-bold text-purple-950">Log In</h1>
+      <h1 className="text-2xl font-bold text-slate-900">Log In</h1>
 
-      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 text-purple-900">
+      <form onSubmit={handleSubmit} className="mt-6 flex flex-col gap-4 text-slate-800">
         <div>
           <label htmlFor="email" className="block text-sm font-medium">
             Email
@@ -87,7 +87,7 @@ export default function LoginPage() {
 
       <p className="mt-4 text-sm text-gray-600">
         Don&apos;t have an account?{" "}
-        <Link href="/register" className="text-purple-600 hover:underline">
+        <Link href="/register" className="text-slate-700 hover:underline">
           Register
         </Link>
       </p>

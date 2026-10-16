@@ -1,9 +1,11 @@
 "use client";
 
+import { socket } from "@/lib/socketClient";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
+import { set } from "zod";
 
-export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
+export default function AISubtaskGenerator({ groupId }: { groupId: string }) {
     const router = useRouter();
     const [topic, setTopic] = useState("");
     const [suggestions, setSuggestions] = useState<string[]>([]);
@@ -17,10 +19,14 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
         setError("");
         setIsGenerating(true);
         setSuggestions([]);
+        setChecked(new Set());
 
         const response = await fetch(`/api/groups/${groupId}/tasks/suggest`, {
             method: "POST",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+              "Content-Type": "application/json",
+              "X-Socket-Id": socket.id ?? "",
+            },
             body: JSON.stringify({ topic }),
         });
 
@@ -28,11 +34,11 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
 
         if (!response.ok) {
             const data = await response.json();
-            setError(data.error ?? "An error occurred while generating suggestions.");
+            setError(data.error ?? "Something went wrong.");
             return;
         }
 
-        const data: {subtasks: string[]} = await response.json();
+        const data: { subtasks: string[] } = await response.json();
         setSuggestions(data.subtasks);
     }
 
@@ -52,13 +58,16 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
         setIsAdding(true);
         setError("");
 
-        const selected = suggestions.filter((subtask) => checked.has(subtask));
-        
+        const selected = suggestions.filter((s) => checked.has(s));
+
         const results = await Promise.all(
             selected.map((title) =>
                 fetch(`/api/groups/${groupId}/tasks`, {
                     method: "POST",
-                    headers: { "Content-Type": "application/json" },
+                    headers: {
+                        "Content-Type": "application/json",
+                        "X-Socket-Id": socket.id ?? "",
+                    },
                     body: JSON.stringify({title}),
                 })
             )
@@ -66,19 +75,19 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
 
         setIsAdding(false);
 
-        if (results.some((res) => !res.ok)) {
+        if(results.some((res) => !res.ok)) {
             setError("Some tasks could not be added. Please try again.");
         }
 
         setSuggestions([]);
-        setChecked(new Set());
+        setTopic("");
         router.refresh();
     }
 
     return (
     <div className="rounded-md border border-dashed p-4">
-      <p className="text-sm font-medium">✨ AI Task Breakdown</p>
-      <p className="mt-1 text-xs text-gray-500">
+      <p className="text-sm font-medium text-slate-700">✨ AI Task Breakdown</p>
+      <p className="mt-1 text-xs text-slate-500">
         Describe a broad task, and get suggested subtasks to add.
       </p>
 
@@ -94,7 +103,7 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
         <button
           type="submit"
           disabled={isGenerating}
-          className="whitespace-nowrap rounded-md bg-emerald-700 px-4 py-2 text-sm font-medium text-white hover:bg-emerald-800 disabled:opacity-50"
+          className="whitespace-nowrap rounded-md bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
         >
           {isGenerating ? "Thinking..." : "Suggest Subtasks"}
         </button>
@@ -104,7 +113,7 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
 
       {suggestions.length > 0 && (
         <div className="mt-3">
-          <ul className="flex flex-col gap-1">
+          <ul className="flex flex-col gap-1 text-slate-600">
             {suggestions.map((subtask) => (
               <li key={subtask} className="flex items-center gap-2 text-sm">
                 <input
@@ -120,7 +129,7 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
           <button
             onClick={handleAddSelected}
             disabled={isAdding || checked.size === 0}
-            className="mt-3 rounded-md bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+            className="mt-3 rounded-md bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800 disabled:opacity-50"
           >
             {isAdding ? "Adding..." : `Add Selected (${checked.size})`}
           </button>
@@ -128,4 +137,4 @@ export default function AISubtaskSuggester({ groupId }: { groupId: string }) {
       )}
     </div>
   );
-} 
+}

@@ -7,7 +7,7 @@ export default function GroupsLayout({
 }) {
   return (
     <div className="p-24 pt-10">
-      <p className="mb-6 text-xs uppercase tracking-wide text-purple-400">
+      <p className="mb-6 text-xs uppercase tracking-wide text-slate-400">
         StudyBoard / Groups
       </p>
       {children}

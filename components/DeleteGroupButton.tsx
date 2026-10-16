@@ -42,7 +42,7 @@ export default function DeleteGroupButton({ groupId }: { groupId: string }) {
         <Button
           onClick={handleDelete}
           disabled={isDeleting}
-          className="whitespace-nowrap rounded-md bg-purple-600 px-4 py-2 text-sm font-medium text-white hover:bg-purple-700"
+          className="whitespace-nowrap rounded-md bg-slate-700 px-4 py-2 text-sm font-medium text-white hover:bg-slate-800"
         >
           {isDeleting ? "Deleting..." : "Delete Group"}
         </Button>

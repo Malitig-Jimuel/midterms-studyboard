@@ -12,14 +12,6 @@ export default function NewGroupForm() {
   const [error, setError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // TODO (Step 8): Implement the submit handler.
-  // 1. Prevent default submission and clear any previous error.
-  // 2. POST to /api/groups with { name, subject, memberCount } as JSON.
-  //    (fetch() automatically includes the NextAuth session cookie for
-  //    same-origin requests — that's how the API route knows who you are.)
-  // 3. If the response is not ok, show the error message from the body.
-  // 4. If it succeeded, parse the created group from the response and
-  //    redirect to its detail page: router.push(`/groups/${newGroup.id}`)
   async function handleSubmit(e: FormEvent) {
     e.preventDefault();
     setError("");
@@ -43,9 +35,15 @@ export default function NewGroupForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} className="flex flex-col gap-4 text-purple-900">
+    <form
+      onSubmit={handleSubmit}
+      className="flex flex-col gap-4 text-slate-800"
+    >
       <div>
-        <label htmlFor="name" className="block text-sm font-medium">
+        <label
+          htmlFor="name"
+          className="block text-sm font-medium text-slate-700"
+        >
           Group Name
         </label>
         <input
@@ -54,12 +52,15 @@ export default function NewGroupForm() {
           required
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="mt-1 w-full rounded-md border px-3 py-2"
+          className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
         />
       </div>
 
       <div>
-        <label htmlFor="subject" className="block text-sm font-medium">
+        <label
+          htmlFor="subject"
+          className="block text-sm font-medium text-slate-700"
+        >
           Subject
         </label>
         <input
@@ -68,12 +69,15 @@ export default function NewGroupForm() {
           required
           value={subject}
           onChange={(e) => setSubject(e.target.value)}
-          className="mt-1 w-full rounded-md border px-3 py-2"
+          className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
         />
       </div>
 
       <div>
-        <label htmlFor="memberCount" className="block text-sm font-medium">
+        <label
+          htmlFor="memberCount"
+          className="block text-sm font-medium text-slate-700"
+        >
           Member Count
         </label>
         <input
@@ -83,7 +87,7 @@ export default function NewGroupForm() {
           required
           value={memberCount}
           onChange={(e) => setMemberCount(Number(e.target.value))}
-          className="mt-1 w-full rounded-md border px-3 py-2"
+          className="mt-1 w-full rounded-md border border-slate-300 bg-white px-3 py-2 text-slate-900 focus:border-slate-500 focus:outline-none focus:ring-2 focus:ring-slate-200"
         />
       </div>
 
